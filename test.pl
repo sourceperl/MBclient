@@ -13,7 +13,7 @@ $mb->unit_id(1);
 # for print frame and debug string : uncomment this line
 #$mb->{debug} = 1;
 
-# write regiter 0 to 9 with value from 0 to 90
+# write register 0 to 9 with value from 0 to 90
 my $i = 0;
 while($i < 10) {
   $mb->write_single_register($i, $i*10);
