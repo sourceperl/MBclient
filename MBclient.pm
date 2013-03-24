@@ -1,5 +1,5 @@
-# Client ModBus / TCP class 1
-#     Version: 1.3.0
+# Perl module: Client ModBus / TCP class 1
+#     Version: 1.4.0
 #     Website: http://source.perl.free.fr (in french)
 #        Date: 23/03/2013
 #     License: GPL v3 (http://www.gnu.org/licenses/quick-guide-gplv3.en.html)
@@ -29,7 +29,7 @@ use Exporter;
 use Socket;
 use bytes;
 
-$VERSION = '1.3.0';
+$VERSION = '1.4.0';
 
 ##
 ## Constant
@@ -82,7 +82,7 @@ sub new {
   my $class = ref($this) || $this;
   my $self = {};
   ##
-  ## UPPERCASE items have documented acessor functions (methods) or
+  ## UPPERCASE items have documented accessor functions (methods) or
   ## use AUTOLOAD, while lowercase items are reserved for internal
   ## use.
   ##
@@ -110,6 +110,40 @@ sub version {
   my $self = shift;
   print "version() called.\n" if $self->{debug};
   return $self->{VERSION};
+}
+
+##
+## Get or set host field (IPv4 or hostname like "plc.domain.net")
+##
+
+sub host {
+  my $self = shift;
+  my $hostname  = shift;
+  # return last hostname if no arg
+  return $self->{HOST} unless defined $hostname;
+  # if host is IPv4 address or valid URL
+  if (($hostname =~ m/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) or 
+      ($hostname =~ m/^[a-z][a-z0-9\.\-]+$/)) {
+    $self->{HOST} = $hostname;
+  }
+  return $self->{HOST};
+}
+
+##
+## Get or set TCP port field
+##
+
+sub port {
+  my $self = shift;
+  my $port  = shift;
+  # return last hostname if no arg
+  return $self->{PORT} unless defined $port;
+  # if host is IPv4 address or valid URL
+  if (($port =~ m/^\d{1,5}$/) and 
+      ($port < 65536)) {
+    $self->{PORT} = $port;
+  }
+  return $self->{PORT};
 }
 
 ##

@@ -7,11 +7,17 @@ use MBclient;
 
 # create modbus object
 my $mb = MBclient->new();
+
 # on local modbus server
-$mb->{HOST}  = '127.0.0.1';
+$mb->host("127.0.0.1");
 $mb->unit_id(1);
 # for print frame and debug string : uncomment this line
 #$mb->{debug} = 1;
+
+# open TCP socket
+if (! $mb->open()) {
+  print "unable to open TCP socket.\n";
+}
 
 # write register 0 to 9 with value from 0 to 90
 my $i = 0;
