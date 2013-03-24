@@ -17,6 +17,7 @@ $mb->unit_id(1);
 # open TCP socket
 if (! $mb->open()) {
   print "unable to open TCP socket.\n";
+  exit(1);
 }
 
 # write register 0 to 9 with value from 0 to 90
