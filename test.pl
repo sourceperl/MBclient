@@ -20,14 +20,7 @@ if (! $mb->open()) {
   exit(1);
 }
 
-# write register 0 to 9 with value from 0 to 90
-my $i = 0;
-while($i < 10) {
-  $mb->write_single_register($i, $i*10);
-  $i++;
-}
-
-# read register 0 to 9
+# read register 0 to 9 and print it on stdout
 my $words = $mb->read_holding_registers(0, 10);
 foreach my $word (@$words) {
   print $word."\n";

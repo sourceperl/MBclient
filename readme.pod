@@ -1,0 +1,151 @@
+=head1 NAME
+
+MBclient - Add modbus TCP or RTU functions for your program.
+
+=head1 SYNOPSIS
+
+  use strict;
+  use MBclient;
+
+  my $m = MBclient->new();
+  # define server target
+  $m->host("localhost");
+  $m->unit_id(1);
+
+  # read 16 bits register from ad 0 to 9
+  my $words = $m->read_holding_registers(0, 10);
+
+  # print words
+  foreach my $word (@$words) {
+    print $word."\n";
+  }
+
+  # clean exit
+  $m->close();
+  exit 0;
+
+=head1 DESCRIPTION
+
+Modbus is a standard serial communication protocol for interconnect industrial 
+PLC (and a lot of other things). This module give you access to TCP and RTU 
+version of this protocol, through the MBclient object.
+
+You can see at http://en.wikipedia.org/wiki/Modbus for details. 
+
+=head1 USAGE
+
+=head2 How you might use this
+
+Here is how you I<might> use the MBclient module.
+
+At the begining you create the object then you have to set some params. This 
+params are host, port, unit_id. Now, it's time to do the job so we can directly
+call "modbus function" routines or call open() first. 
+
+If you omit to call open() before call a "modbus function" routines, the
+modbus routines do it for you. But in anny case, you have to call close(), at 
+the end of your programm and/or request. This is necessary to ensure clean TCP 
+close.
+
+=head2 Functions
+
+The following functions are defined in the MBclient module. Most of
+them are I<public>, meaning that you're supposed to use
+them. Some are I<private>, meaning that you're not supposed to use
+them. Assume that functions are I<public>
+unless otherwise documented.
+
+=over
+
+=item open()
+
+open() funtion open the TCP link. If the TCP link is up when the function is called
+a close/open cycle is initiate.
+
+This function return undef in case of error.
+
+Example: C<$m-E<gt>open();>
+
+=item is_open()
+
+is_open() return True if TCP link is open, False when TCP is closed
+
+Example: C<$m-E<gt>is_open();>
+
+=item close()
+
+close() function close the TCP link.
+
+Return True if sucess, undef if error.
+
+Example: C<$m-E<gt>close();>
+
+=item mode(MODBUS_MODE)
+
+Use to set modbus mode : TCP (default value) or RTU (add crc16 on every frame).
+
+2 constants are import with this module MODBUS_TCP and MODBUS_RTU. Use it to 
+define modbus mode.
+
+Example: C<print $m-E<gt>mode(MODBUS_RTU);>
+
+=item host(hostname)
+
+Use to set server IPv4 like "192.168.0.1" or URL name like "plc1.domain.net".
+
+Return "hostname" if sucess, undef in other case.
+
+You can read hostname property if you call host() without arg.
+
+Example: C<print $m-E<gt>host("192.168.0.1");>
+
+=item port(port)
+
+Use to set server port (default is 502).
+
+Return "port" if sucess, undef in other case.
+
+You can read port property if you call port() without arg.
+
+Example: C<print $m-E<gt>port(888);>
+
+=item unit_id(uid)
+
+Use to set server modbus unit id (default is 1).
+
+Return "uid" if success, undef in other case.
+
+You can read port property if you call unit_id() without arg.
+
+Example: C<print $m-E<gt>unit_id(1);>
+
+=item version()
+
+version() will print out the current version.
+
+Example: C<print $m-E<gt>version();>
+
+=item _send(data)
+
+B<PRIVATE>
+
+Send "data" over the current socket.
+
+=item _recv(max_size)
+
+B<PRIVATE>
+
+Receive "max_size" bytes of data from the current socket.
+
+=back
+
+=head1 NOTES
+
+"test.pl" is provide like a basic test script. You can use it like a skeleton
+for begin a modbus script.
+
+=head1 BUGS
+
+Thanks to report issuse at https://github.com/sourceperl/MBclient/
+
+=cut
