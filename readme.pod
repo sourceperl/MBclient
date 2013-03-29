@@ -132,8 +132,6 @@ Each error is a constant import in your program, so you can do thing like:
     exit 2;
   }
 
-Example: C<print $m-E<gt>last_error();>
-
 =item last_except()
 
 last_except() return last modbus exception code.
@@ -146,8 +144,6 @@ Each except is a constant import in your program, so you can do thing like:
     print "check your modbus gateway please\n";
     exit 3;
   }
-
-Example: C<print $m-E<gt>last_except();>
 
 =item version()
 
