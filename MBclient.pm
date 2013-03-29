@@ -1,5 +1,5 @@
 # Perl module: Client ModBus / TCP class 1
-#     Version: 1.4.0
+#     Version: 1.4.1
 #     Website: http://source.perl.free.fr (in french)
 #        Date: 23/03/2013
 #     License: GPL v3 (http://www.gnu.org/licenses/quick-guide-gplv3.en.html)
@@ -29,7 +29,7 @@ use Exporter;
 use Socket;
 use bytes;
 
-$VERSION = '1.4.0';
+$VERSION = '1.4.1';
 
 ##
 ## Constant
@@ -82,9 +82,8 @@ sub new {
   my $class = ref($this) || $this;
   my $self = {};
   ##
-  ## UPPERCASE items have documented accessor functions (methods) or
-  ## use AUTOLOAD, while lowercase items are reserved for internal
-  ## use.
+  ## UPPERCASE items have documented accessor functions.
+  ## lowercase items are reserved for internal use.
   ##
   $self->{VERSION}       = $VERSION;          # version number
   $self->{HOST}          = undef;             # 
@@ -108,12 +107,29 @@ sub new {
 
 sub version {
   my $self = shift;
-  print "version() called.\n" if $self->{debug};
   return $self->{VERSION};
 }
 
 ##
-## Get or set host field (IPv4 or hostname like "plc.domain.net")
+## Get last error code.
+##
+
+sub last_error {
+  my $self = shift;
+  return $self->{LAST_ERROR};
+}
+
+##
+## Get last except code.
+##
+
+sub last_except {
+  my $self = shift;
+  return $self->{LAST_EXCEPT};
+}
+
+##
+## Get or set host field (IPv4 or hostname like "plc.domain.net").
 ##
 
 sub host {
@@ -130,7 +146,7 @@ sub host {
 }
 
 ##
-## Get or set TCP port field
+## Get or set TCP port field.
 ##
 
 sub port {
@@ -163,7 +179,7 @@ sub unit_id {
 }
 
 ##
-## Get or set modbus mode (TCP or RTU)
+## Get or set modbus mode (TCP or RTU).
 ##
 
 sub mode {
@@ -177,7 +193,7 @@ sub mode {
 }
 
 ##
-## Open TCP link
+## Open TCP link.
 ##
 
 sub open {
@@ -206,7 +222,7 @@ sub open {
 };
 
 ##
-## Check TCP link
+## Check TCP link.
 ##
 
 sub is_open {
@@ -214,9 +230,8 @@ sub is_open {
   return (defined $self->{sock});
 };
 
-
 ##
-## Close TCP link
+## Close TCP link.
 ##
 
 sub close {
@@ -231,7 +246,7 @@ sub close {
 };
 
 ##
-## mbus_std READ_COILS (0x01)
+## Modbus function READ_COILS (0x01).
 ##   read_coils(bit_addr, bit_number)
 ##   return a ref to result array
 ##          or undef if error
@@ -259,7 +274,7 @@ sub read_coils {
 }
 
 ##
-## mbus_std READ_DISCRETE_INPUTS (0x02)
+## Modbus function READ_DISCRETE_INPUTS (0x02).
 ##   read_discrete_inputs(bit_addr, bit_number)
 ##   return a ref to result array
 ##          or undef if error
@@ -288,7 +303,7 @@ sub read_discrete_inputs {
 
 
 ##
-## mbus_std READ_HOLDING_REGISTERS (0x03)
+## Modbus function READ_HOLDING_REGISTERS (0x03).
 ##   read_holding_registers(reg_addr, reg_number)
 ##   return a ref to result array
 ##          or undef if error
@@ -315,7 +330,7 @@ sub read_holding_registers {
 }
 
 ##
-## mbus_std READ_INPUT_REGISTERS  (0x04)
+## Modbus function READ_INPUT_REGISTERS (0x04).
 ##   read_input_registers(reg_addr, reg_number)
 ##   return a ref to result array
 ##          or undef if error
@@ -342,7 +357,7 @@ sub read_input_registers {
 }
 
 ##
-## mbus_std WRITE_SINGLE_COIL (0x05)
+## Modbus function WRITE_SINGLE_COIL (0x05).
 ##   write_single_coil(bit_addr, bit_value)
 ##   return 1 if write sucess
 ##          or undef if error
@@ -369,7 +384,7 @@ sub write_single_coil {
 }
 
 ##
-## mbus_std WRITE_SINGLE_REGISTER (0x06)
+## Modbus function WRITE_SINGLE_REGISTER (0x06).
 ##   write_single_register(reg_addr, reg_value)
 ##   return 1 if write sucess
 ##          or undef if error
@@ -395,7 +410,7 @@ sub write_single_register {
 }
 
 ##
-## mbus_std WRITE_MULTIPLE_REGISTERS (0x10)
+## Modbus function WRITE_MULTIPLE_REGISTERS (0x10).
 ##   write_multiple_registers(reg_addr, ref_to_reg_array)
 ##   return 1 if write sucess
 ##          or undef if error
@@ -429,7 +444,7 @@ sub write_multiple_registers {
   return ($rx_reg_addr == $reg_addr) ? 1 : undef;
 }
 
-# build modbus frame
+# Build modbus frame.
 #   _mbus_frame(function code, body)
 #   return modbus frame
 sub _mbus_frame {
@@ -458,7 +473,7 @@ sub _mbus_frame {
   }
 }
 
-# send modbus frame
+# Send modbus frame.
 #   _send_mbus(frame)
 #   return $nb_byte send 
 sub _send_mbus {
@@ -473,7 +488,7 @@ sub _send_mbus {
   return $bytes_send;
 }
 
-# recv modbus frame
+# Recv modbus frame.
 #   _recv_mbus()
 #   return body (after func. code) 
 sub _recv_mbus {
@@ -533,7 +548,7 @@ sub _recv_mbus {
   }
 }
 
-# send data over current socket
+# Send data over current socket.
 #   _send(data_to_send)
 #   return the number of bytes send
 #          or undef if error
@@ -559,7 +574,7 @@ sub _send {
   }
 }
 
-# recv data over current socket
+# Recv data over current socket.
 #   _recv(max_size)
 #   return the number of bytes send
 #          or undef if error
@@ -583,7 +598,7 @@ sub _recv {
   return $buffer;
 }
 
-# wait for socket read
+# Wait for socket read.
 sub _can_read {
   my $self  = shift;
   my $hdl_select = "";
@@ -599,25 +614,7 @@ sub _can_read {
   }
 }
 
-# decode tags stream
-#   _decode_tags(string_with_encoded_tags)
-#   return a ref to a hash witch decoded tags
-sub _decode_tags {
-  my $self     = shift;
-  my $str_tags = shift;
-  # tags extract
-  my ($tag, $tag_value);
-  my %tags;
-  while (1) {
-    last if (bytes::length($str_tags) < 10);     
-    ($tag, $tag_value, $str_tags) = unpack 'A6fa*', $str_tags;
-    last if (bytes::length($tag) == 0);
-    $tags{$tag} = $tag_value;
-  }
-  return \%tags;
-}
-
-# compute modbus CRC16 (for RTU mode)
+# Compute modbus CRC16 (for RTU mode).
 #   _crc(modbus_frame)
 #   return the CRC
 sub _crc {
@@ -637,7 +634,7 @@ sub _crc {
   return $crc;
 }
 
-# add CRC to modbus frame (for RTU mode)
+# Add CRC to modbus frame (for RTU mode).
 #   _add_crc(modbus_frame)
 #   return modbus_frame_with_crc
 sub _add_crc {
@@ -647,7 +644,7 @@ sub _add_crc {
   return $frame.$crc;
 }
 
-# check the CRC of modbus RTU frame
+# Check the CRC of modbus RTU frame.
 #   _crc_is_ok(modbus_frame_with_crc)
 #   return true if CRC is ok
 sub _crc_is_ok {
@@ -657,7 +654,7 @@ sub _crc_is_ok {
   return ($crc == $self->_crc($frame));
 }
 
-# print modbus/TCP frame ("[header]body") or modbus RTU ("body[CRC]")
+# Print modbus/TCP frame ("[header]body") or modbus RTU ("body[CRC]").
 sub _pretty_dump {
   my $self  = shift;
   my $label = shift;
