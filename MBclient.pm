@@ -1,5 +1,5 @@
 # Perl module: Client ModBus / TCP class 1
-#     Version: 1.4.1
+#     Version: 1.4.2
 #     Website: http://source.perl.free.fr (in french)
 #        Date: 23/03/2013
 #     License: GPL v3 (http://www.gnu.org/licenses/quick-guide-gplv3.en.html)
@@ -25,11 +25,13 @@ use Exporter;
              EXP_ILLEGAL_FUNCTION EXP_DATA_ADDRESS EXP_DATA_VALUE
              EXP_SLAVE_DEVICE_FAILURE  EXP_ACKNOWLEDGE EXP_SLAVE_DEVICE_BUSY
              EXP_MEMORY_PARITY_ERROR EXP_GATEWAY_PATH_UNAVAILABLE 
-             EXP_GATEWAY_TARGET_DEVICE_FAILED_TO_RESPOND);
+             EXP_GATEWAY_TARGET_DEVICE_FAILED_TO_RESPOND
+             MB_NO_ERR MB_RESOLVE_ERR MB_CONNECT_ERR MB_SEND_ERR
+             MB_RECV_ERR MB_TIMEOUT_ERR MB_FRAME_ERR MB_EXCEPT_ERR);
 use Socket;
 use bytes;
 
-$VERSION = '1.4.1';
+$VERSION = '1.4.2';
 
 ##
 ## Constant
@@ -63,14 +65,14 @@ use constant EXP_MEMORY_PARITY_ERROR                     => 0x08;
 use constant EXP_GATEWAY_PATH_UNAVAILABLE                => 0x0A;
 use constant EXP_GATEWAY_TARGET_DEVICE_FAILED_TO_RESPOND => 0x0B;
 ## Module error codes
-use constant NO_ERR                                      => 0;
-use constant RESOLVE_ERR                                 => 1;
-use constant CONNECT_ERR                                 => 2;
-use constant SEND_ERR                                    => 3;
-use constant RECV_ERR                                    => 4;
-use constant TIMEOUT_ERR                                 => 5;
-use constant FRAME_ERR                                   => 6;
-use constant EXCEPT_ERR                                  => 7;
+use constant MB_NO_ERR                                   => 0;
+use constant MB_RESOLVE_ERR                              => 1;
+use constant MB_CONNECT_ERR                              => 2;
+use constant MB_SEND_ERR                                 => 3;
+use constant MB_RECV_ERR                                 => 4;
+use constant MB_TIMEOUT_ERR                              => 5;
+use constant MB_FRAME_ERR                                => 6;
+use constant MB_EXCEPT_ERR                               => 7;
 
 
 ##
@@ -89,7 +91,7 @@ sub new {
   $self->{HOST}          = undef;             # 
   $self->{PORT}          = MODBUS_PORT;       # 
   $self->{UNIT_ID}       = 1;                 # 
-  $self->{LAST_ERROR}    = NO_ERR;            # last error code   
+  $self->{LAST_ERROR}    = MB_NO_ERR;         # last error code   
   $self->{LAST_EXCEPT}   = 0;                 # last expect code   
   $self->{MODE}          = MODBUS_TCP;        # by default modbus/tcp
   $self->{sock}          = undef;             # socket handle
@@ -204,7 +206,7 @@ sub open {
   # name resolve
   my $ad_ip = inet_aton($self->{HOST});
   unless($ad_ip) {
-    $self->{LAST_ERROR} = RESOLVE_ERR;
+    $self->{LAST_ERROR} = MB_RESOLVE_ERR;
     print 'IP resolve error'."\n" if ($self->{debug});
     return undef;
   }
@@ -215,7 +217,7 @@ sub open {
     return 1;
   } else {
     $self->{sock} = undef;
-    $self->{LAST_ERROR} = CONNECT_ERR;
+    $self->{LAST_ERROR} = MB_CONNECT_ERR;
     print 'TCP connect error'."\n" if ($self->{debug});
     return undef;
   }
@@ -359,7 +361,7 @@ sub read_input_registers {
 ##
 ## Modbus function WRITE_SINGLE_COIL (0x05).
 ##   write_single_coil(bit_addr, bit_value)
-##   return 1 if write sucess
+##   return 1 if write success
 ##          or undef if error
 
 sub write_single_coil {
@@ -386,7 +388,7 @@ sub write_single_coil {
 ##
 ## Modbus function WRITE_SINGLE_REGISTER (0x06).
 ##   write_single_register(reg_addr, reg_value)
-##   return 1 if write sucess
+##   return 1 if write success
 ##          or undef if error
 
 sub write_single_register {
@@ -412,7 +414,7 @@ sub write_single_register {
 ##
 ## Modbus function WRITE_MULTIPLE_REGISTERS (0x10).
 ##   write_multiple_registers(reg_addr, ref_to_reg_array)
-##   return 1 if write sucess
+##   return 1 if write success
 ##          or undef if error
 
 sub write_multiple_registers {
@@ -538,7 +540,7 @@ sub _recv_mbus {
   if ($rx_bd_fc > 0x80) {
     # except code
     my ($exp_code) = unpack "C", $f_body;
-    $self->{LAST_ERROR}  = EXCEPT_ERR;
+    $self->{LAST_ERROR}  = MB_EXCEPT_ERR;
     $self->{LAST_EXCEPT} = $exp_code;
     print 'except (code '.$exp_code.')'."\n" if ($self->{debug});
     return undef;
@@ -565,7 +567,7 @@ sub _send {
   my $send_l = send($self->{sock}, $data, 0);
   # send error
   if ($send_l != $data_l) {
-    $self->{LAST_ERROR} = SEND_ERR;
+    $self->{LAST_ERROR} = MB_SEND_ERR;
     print '_send error'."\n" if ($self->{debug});
     $self->close;
     return undef;
@@ -576,7 +578,7 @@ sub _send {
 
 # Recv data over current socket.
 #   _recv(max_size)
-#   return the number of bytes send
+#   return the receive buffer
 #          or undef if error
 sub _recv {
   my $self     = shift;
@@ -590,7 +592,7 @@ sub _recv {
   my $buffer;
   my $s_recv = recv($self->{sock}, $buffer, $max_size, 0);
   unless (defined $s_recv) {
-    $self->{LAST_ERROR} = RECV_ERR;
+    $self->{LAST_ERROR} = MB_RECV_ERR;
     print '_recv error'."\n" if ($self->{debug});
     $self->close;
     return undef;
@@ -607,7 +609,7 @@ sub _can_read {
   if ($_select) {
     return $_select;
   } else {  
-    $self->{LAST_ERROR} = TIMEOUT_ERR;
+    $self->{LAST_ERROR} = MB_TIMEOUT_ERR;
     print 'timeout error'."\n" if ($self->{debug});
     $self->close;
     return undef;
