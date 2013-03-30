@@ -189,7 +189,7 @@ sub mode {
   my $mode  = shift;
   # return mode if no arg
   return $self->{MODE} unless defined $mode;
-  # if uid is numeric, set unit_id
+  # set mode and return mode
   $self->{MODE} = $mode;
   return $self->{MODE};
 }
