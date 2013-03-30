@@ -26,11 +26,11 @@ MBclient - Add modbus TCP or RTU functions for your program.
 
 =head1 DESCRIPTION
 
-Modbus is a standard serial communication protocol for interconnect industrial 
-PLC (and a lot of other things). This module give you access to TCP and RTU 
+Modbus is a standard serial communication protocol used to interconnect industrial 
+PLC (and a lot of other things). This module gives you access to TCP and RTU 
 version of this protocol, through the MBclient object.
 
-You can see at http://en.wikipedia.org/wiki/Modbus for details. 
+You can have a look at http://en.wikipedia.org/wiki/Modbus for details. 
 
 =head1 USAGE
 
@@ -38,14 +38,10 @@ You can see at http://en.wikipedia.org/wiki/Modbus for details.
 
 Here is how you I<might> use the MBclient module.
 
-At the begining you create the object then you have to set some params. This 
-params are host, port, unit_id. Now, it's time to do the job so we can directly
-call "modbus function" routines or call open() first. 
+First you have to create the object, and to set main params : host, port and unit_id. 
 
-If you omit to call open() before call a "modbus function" routines, the
-modbus routines do it for you. But in anny case, you have to call close(), at 
-the end of your programm and/or request. This is necessary to ensure clean TCP 
-close.
+Then call open() function, or directly a "modbus function". In any case, you have to call the close() method, in order 
+to cleanly close the TCP link.
 
 =head2 Functions
 
@@ -60,7 +56,7 @@ unless otherwise documented.
 =item open()
 
 open() funtion open the TCP link. If the TCP link is up when the function is
-called a close/open cycle is initiate.
+called a close/open cycle is initiated.
 
 This function return undef in case of error.
 
@@ -345,13 +341,13 @@ Print modbus/TCP frame in pretty format.
 
 =head1 NOTES
 
-- The file "test.pl" is provide as a basic script. You can use it like a 
-skeleton for begin a modbus script.
+- The file "test.pl" is provided as a basic script. You can use it as a 
+skeleton to start writing a modbus script.
 
 - Advance users can enable debug messages with C<$m-E<gt>{debug}=1;>
 
 =head1 BUGS
 
-Thanks to report issuse at https://github.com/sourceperl/MBclient/
+Thanks to report issues at https://github.com/sourceperl/MBclient/
 
 =cut
