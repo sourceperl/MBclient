@@ -1,7 +1,7 @@
 # Perl module: Client ModBus / TCP class 1
 #     Version: 1.50
-#     Website: http://source.perl.free.fr (in french)
-#        Date: 23/03/2013
+#     Website: https://github.com/sourceperl/MBclient/
+#        Date: 2014-07-03
 #     License: MIT (http://http://opensource.org/licenses/mit-license.php)
 # Description: Client ModBus / TCP command line
 #              Support functions 3 and 16 (class 0)

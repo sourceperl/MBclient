@@ -1,0 +1,24 @@
+MBclient version 1.50
+=====================
+
+Modbus is a standard serial communication protocol used to interconnect industrial 
+PLC (and a lot of other things). This module gives you access to TCP and RTU 
+version of this protocol, through the MBclient object.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   sudo make install
+
+DEPENDENCIES
+
+This module requires no other module or librarie.
+
+COPYRIGHT AND LICENCE
+
+See LICENSE file in the dist.
+

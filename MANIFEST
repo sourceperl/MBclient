@@ -1,0 +1,9 @@
+Changes
+docs/README.pod
+examples/read_10_reg.pl
+lib/MBclient.pm
+LICENSE
+Makefile.PL
+MANIFEST
+README
+t/MBclient.t
