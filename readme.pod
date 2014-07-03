@@ -341,8 +341,8 @@ Print modbus/TCP frame in pretty format.
 
 =head1 NOTES
 
-- The file "test.pl" is provided as a basic script. You can use it as a 
-skeleton to start writing a modbus script.
+- The file "examples/read_10_reg.pl " is provided as a basic script. You can use
+it as a skeleton to start writing a modbus script.
 
 - Advance users can enable debug messages with C<$m-E<gt>{debug}=1;>
 
