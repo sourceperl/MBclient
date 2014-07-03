@@ -1,9 +1,11 @@
 MBclient version 1.50
 =====================
 
-Modbus is a standard serial communication protocol used to interconnect industrial 
-PLC (and a lot of other things). This module gives you access to TCP and RTU 
-version of this protocol, through the MBclient object.
+Modbus is a standard serial communication protocol used to interconnect
+industrial PLC (and a lot of other things). This module gives you access to
+TCP and RTU version of this protocol, through the MBclient object.
+
+See /docs for samples and full API documentation.
 
 INSTALLATION
 
@@ -19,6 +21,8 @@ DEPENDENCIES
 This module requires no other module or librarie.
 
 COPYRIGHT AND LICENCE
+
+Loic Lefebvre (lle@cpan.org).
 
 See LICENSE file in the dist.
 
