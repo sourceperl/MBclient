@@ -1,5 +1,5 @@
 # Perl module: Client ModBus / TCP class 1
-#     Version: 1.4.2
+#     Version: 1.50
 #     Website: http://source.perl.free.fr (in french)
 #        Date: 23/03/2013
 #     License: MIT (http://http://opensource.org/licenses/mit-license.php)
@@ -31,7 +31,7 @@ use Exporter;
 use Socket;
 use bytes;
 
-$VERSION = '1.4.2';
+our $VERSION = '1.50';
 
 ##
 ## Constant
