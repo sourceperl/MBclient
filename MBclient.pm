@@ -2,7 +2,7 @@
 #     Version: 1.4.2
 #     Website: http://source.perl.free.fr (in french)
 #        Date: 23/03/2013
-#     License: GPL v3 (http://www.gnu.org/licenses/quick-guide-gplv3.en.html)
+#     License: MIT (http://http://opensource.org/licenses/mit-license.php)
 # Description: Client ModBus / TCP command line
 #              Support functions 3 and 16 (class 0)
 #              1,2,4,5,6 (Class 1)
