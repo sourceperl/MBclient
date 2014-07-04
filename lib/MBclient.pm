@@ -1,7 +1,7 @@
 # Perl module: Client ModBus / TCP class 1
-#     Version: 1.50
+#     Version: 1.51
 #     Website: https://github.com/sourceperl/MBclient/
-#        Date: 2014-07-03
+#        Date: 2014-07-04
 #     License: MIT (http://http://opensource.org/licenses/mit-license.php)
 # Description: Client ModBus / TCP command line
 #              Support functions 3 and 16 (class 0)
@@ -16,8 +16,9 @@ package MBclient;
 
 ## Required Modules
 
-use 5.005;
+use 5.006_001;
 use strict;
+use warnings;
 use vars qw($AUTOLOAD $VERSION @ISA @EXPORT);
 use Exporter;
 @ISA    = qw(Exporter);
@@ -31,7 +32,7 @@ use Exporter;
 use Socket;
 use bytes;
 
-our $VERSION = '1.50';
+our $VERSION = '1.51';
 
 ##
 ## Constant

@@ -3,6 +3,7 @@
 # for test MBclient perl module
 
 use strict;
+use warnings;
 use MBclient;
 
 # create modbus object
