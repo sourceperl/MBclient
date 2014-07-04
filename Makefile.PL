@@ -7,6 +7,16 @@ WriteMakefile(
     VERSION_FROM      => 'lib/MBclient.pm', # finds $VERSION
     LICENSE           => 'MIT',
     MIN_PERL_VERSION  => '5.006_001',
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+        resources => {
+            repository => {
+                type => 'git',
+                url  => 'https://github.com/sourceperl/MBclient.git',
+                web  => 'https://github.com/sourceperl/MBclient',
+            },
+        },
+    },
     PREREQ_PM         => {}, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/MBclient.pm', # retrieve abstract from module
