@@ -10,7 +10,7 @@
 
 # todo
 #   - add support for MEI function
-# 
+#
 
 package MBclient;
 
@@ -24,7 +24,7 @@ use Exporter;
 @EXPORT = qw(MODBUS_TCP MODBUS_RTU
              EXP_ILLEGAL_FUNCTION EXP_DATA_ADDRESS EXP_DATA_VALUE
              EXP_SLAVE_DEVICE_FAILURE  EXP_ACKNOWLEDGE EXP_SLAVE_DEVICE_BUSY
-             EXP_MEMORY_PARITY_ERROR EXP_GATEWAY_PATH_UNAVAILABLE 
+             EXP_MEMORY_PARITY_ERROR EXP_GATEWAY_PATH_UNAVAILABLE
              EXP_GATEWAY_TARGET_DEVICE_FAILED_TO_RESPOND
              MB_NO_ERR MB_RESOLVE_ERR MB_CONNECT_ERR MB_SEND_ERR
              MB_RECV_ERR MB_TIMEOUT_ERR MB_FRAME_ERR MB_EXCEPT_ERR);
@@ -88,11 +88,11 @@ sub new {
   ## lowercase items are reserved for internal use.
   ##
   $self->{VERSION}       = $VERSION;          # version number
-  $self->{HOST}          = undef;             # 
-  $self->{PORT}          = MODBUS_PORT;       # 
-  $self->{UNIT_ID}       = 1;                 # 
-  $self->{LAST_ERROR}    = MB_NO_ERR;         # last error code   
-  $self->{LAST_EXCEPT}   = 0;                 # last expect code   
+  $self->{HOST}          = undef;             #
+  $self->{PORT}          = MODBUS_PORT;       #
+  $self->{UNIT_ID}       = 1;                 #
+  $self->{LAST_ERROR}    = MB_NO_ERR;         # last error code
+  $self->{LAST_EXCEPT}   = 0;                 # last expect code
   $self->{MODE}          = MODBUS_TCP;        # by default modbus/tcp
   $self->{sock}          = undef;             # socket handle
   $self->{timeout}       = 30;                # socket timeout
@@ -140,7 +140,7 @@ sub host {
   # return last hostname if no arg
   return $self->{HOST} unless defined $hostname;
   # if host is IPv4 address or valid URL
-  if (($hostname =~ m/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) or 
+  if (($hostname =~ m/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) or
       ($hostname =~ m/^[a-z][a-z0-9\.\-]+$/)) {
     $self->{HOST} = $hostname;
   }
@@ -157,7 +157,7 @@ sub port {
   # return last hostname if no arg
   return $self->{PORT} unless defined $port;
   # if host is IPv4 address or valid URL
-  if (($port =~ m/^\d{1,5}$/) and 
+  if (($port =~ m/^\d{1,5}$/) and
       ($port < 65536)) {
     $self->{PORT} = $port;
   }
@@ -238,7 +238,7 @@ sub is_open {
 
 sub close {
   my $self = shift;
-  if ($self->{sock}) { 
+  if ($self->{sock}) {
     close $self->{sock};
     $self->{sock} = undef;
     return 1;
@@ -477,7 +477,7 @@ sub _mbus_frame {
 
 # Send modbus frame.
 #   _send_mbus(frame)
-#   return $nb_byte send 
+#   return $nb_byte send
 sub _send_mbus {
   my $self  = shift;
   my $frame = shift;
@@ -492,7 +492,7 @@ sub _send_mbus {
 
 # Recv modbus frame.
 #   _recv_mbus()
-#   return body (after func. code) 
+#   return body (after func. code)
 sub _recv_mbus {
   my $self  = shift;
   ## receive
@@ -522,7 +522,7 @@ sub _recv_mbus {
     # body decode
     ($rx_bd_fc, $f_body) = unpack "Ca*", $rx_buffer;
   # modbus RTU receive
-  } elsif ($self->{MODE} == MODBUS_RTU) {   
+  } elsif ($self->{MODE} == MODBUS_RTU) {
     $rx_buffer = $self->_recv(FRAME_RTU_MAXSIZE);
     return undef unless($rx_buffer);
     $rx_frame = $rx_buffer;
@@ -535,7 +535,7 @@ sub _recv_mbus {
       $self->close;
       return undef;
     }
-  }  
+  }
   # check except
   if ($rx_bd_fc > 0x80) {
     # except code
@@ -608,7 +608,7 @@ sub _can_read {
   my $_select = select($hdl_select, undef, undef, $self->{timeout});
   if ($_select) {
     return $_select;
-  } else {  
+  } else {
     $self->{LAST_ERROR} = MB_TIMEOUT_ERR;
     print 'timeout error'."\n" if ($self->{debug});
     $self->close;
@@ -708,11 +708,30 @@ MBclient - Add modbus TCP or RTU functions for your program.
 
 =head1 DESCRIPTION
 
-Modbus is a standard serial communication protocol used to interconnect industrial 
-PLC (and a lot of other things). This module gives you access to TCP and RTU 
+Modbus is a standard serial communication protocol used to interconnect industrial
+PLC (and a lot of other things). This module gives you access to TCP and RTU
 version of this protocol, through the MBclient object.
 
-You can have a look at http://en.wikipedia.org/wiki/Modbus for details. 
+You can have a look at http://en.wikipedia.org/wiki/Modbus for details.
+
+=head1 INSTALL
+
+To install this module from GitHub:
+
+    git clone https://github.com/sourceperl/MBclient.git
+    cd MBclient
+    perl Makefile.PL
+    make
+    make test
+    sudo make install
+
+This module is also available from CPAN.
+
+=head1 DEPENDENCIES
+
+This module requires no other module or librarie.
+
+It's pure Perl code without any extension.
 
 =head1 USAGE
 
@@ -720,9 +739,9 @@ You can have a look at http://en.wikipedia.org/wiki/Modbus for details.
 
 Here is how you I<might> use the MBclient module.
 
-First you have to create the object, and to set main params : host, port and unit_id. 
+First you have to create the object, and to set main params : host, port and unit_id.
 
-Then call open() function, or directly a "modbus function". In any case, you have to call the close() method, in order 
+Then call open() function, or directly a "modbus function". In any case, you have to call the close() method, in order
 to cleanly close the TCP link.
 
 =head2 Functions
@@ -762,7 +781,7 @@ Example: C<$m-E<gt>close();>
 
 Use to set modbus mode : TCP (default value) or RTU (add crc16 on every frame).
 
-2 constants are import with this module MODBUS_TCP and MODBUS_RTU. Use it to 
+2 constants are import with this module MODBUS_TCP and MODBUS_RTU. Use it to
 define modbus mode.
 
 Example: C<$m-E<gt>mode(MODBUS_RTU);>
@@ -801,7 +820,7 @@ You can read port property if you call unit_id() without arg.
 
 last_error() return last error on MBclient object.
 
-See source code for "module error code" list. 
+See source code for "module error code" list.
 
 Each error is a constant import in your program, so you can do thing like:
 
@@ -853,7 +872,7 @@ This funtion read "bit_nb" number of bits at "bit_addr" bit address.
 Return a ref to a bits array or undef if error.
 
 Example read 1 bit at hex address 45:
-  
+
   my $bits = $m->read_discrete_inputs(1, 0x45);
   if ($bits) {
     print $$bits[0]."\n";
@@ -929,7 +948,7 @@ Example write 578 on register at address 55:
 
 write_multiple_registers() is standard modbus function 16.
 
-This funtion write an array of register with reference to this array in 
+This funtion write an array of register with reference to this array in
 "ref_array_reg" at "reg_addr" register address.
 
 Return True if write success, undef if error.
@@ -988,7 +1007,7 @@ Return receive buffer or undef if error.
 
 B<PRIVATE>
 
-This function wait for data available on socket, block for a max of timeout 
+This function wait for data available on socket, block for a max of timeout
 second.
 
 =item _crc(frame)
@@ -1031,5 +1050,33 @@ it as a skeleton to start writing a modbus script.
 =head1 BUGS
 
 Thanks to report issues at https://github.com/sourceperl/MBclient/
+
+=head1 AUTHOR
+
+Loic Lefebvre, E<lt>lle@cpan.orgE<gt>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2014 Loic Lefebvre
+
+The MIT License (MIT)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 =cut
