@@ -1,8 +1,11 @@
+Build.PL
 Changes
-README.pod
 examples/read_10_reg.pl
 lib/MBclient.pm
 LICENSE
 Makefile.PL
 MANIFEST
+META.json
+META.yml
+README.pod
 t/MBclient.t

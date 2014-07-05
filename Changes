@@ -1,5 +1,14 @@
 Revision history for perl module MBclient
 
+1.53 2014-07-05
+
+     - Add Build.PL. It's now possible to use Module::Build
+       has dist maker.
+       "create_makefile_pl" is comment in Build.PL to avoid
+       destroy the old Makefile.PL at every build.
+
+     - Improve POD documentation.
+
 1.52 2014-07-04
 
      - Fix Makefile.PL: "use 5.014002" not compatible with old
