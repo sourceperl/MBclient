@@ -717,7 +717,13 @@ You can have a look at http://en.wikipedia.org/wiki/Modbus for details.
 
 =head1 INSTALL
 
-To install this module from GitHub:
+You can install this module from:
+
+CPAN, the easy way:
+
+    sudo perl -MCPAN -e'install MBclient'
+
+GitHub:
 
     git clone https://github.com/sourceperl/MBclient.git
     cd MBclient
@@ -725,8 +731,6 @@ To install this module from GitHub:
     make
     make test
     sudo make install
-
-This module is also available from CPAN.
 
 =head1 DEPENDENCIES
 
