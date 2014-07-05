@@ -759,6 +759,12 @@ unless otherwise documented.
 
 =over
 
+=item new()
+
+new() create an MBclient object.
+
+Example: C<my $m = MBclient-E<gt>new();>
+
 =item open()
 
 open() funtion open the TCP link. If the TCP link is up when the function is
