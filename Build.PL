@@ -16,6 +16,7 @@ my $builder = Module::Build->new(
         'Test::More' => 0,
     },
     requires => {
+        'perl' => '5.006_001',
         #'ABC'              => 1.6,
         #'Foo::Bar::Module' => 5.0401,
     },

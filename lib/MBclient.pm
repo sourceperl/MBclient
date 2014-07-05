@@ -1,5 +1,5 @@
 # Perl module: Client ModBus / TCP class 1
-#     Version: 1.53
+#     Version: 1.54
 #     Website: https://github.com/sourceperl/MBclient/
 #        Date: 2014-07-04
 #     License: MIT (http://http://opensource.org/licenses/mit-license.php)
@@ -32,7 +32,7 @@ use Exporter;
 use Socket;
 use bytes;
 
-our $VERSION = '1.53';
+our $VERSION = '1.54';
 
 ##
 ## Constant

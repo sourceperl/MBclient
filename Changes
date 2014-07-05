@@ -1,5 +1,9 @@
 Revision history for perl module MBclient
 
+1.54 2014-07-05
+
+     - Add perl min version to Build.PL.
+
 1.53 2014-07-05
 
      - Add Build.PL. It's now possible to use Module::Build
