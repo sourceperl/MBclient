@@ -1,6 +1,8 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
-# for test MBclient perl module
+# Display 10 registers from local modbus server to console.
+# For test it, you need a modbus/TCP server like mbserverd. It's available here:
+# https://github.com/sourceperl/mbserverd
 
 use strict;
 use warnings;
