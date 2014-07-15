@@ -1,5 +1,12 @@
 Revision history for perl module MBclient
 
+1.55 2014-07-15
+
+     - Add POD coverage test to dist test.
+     - Improve POD documentation (coverage = 100%).
+     - Add MANIFEST.SKIP for Build.PL.
+     - Add a simple example with Perl Tk.
+
 1.54 2014-07-05
 
      - Add perl min version to Build.PL.
