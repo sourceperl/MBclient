@@ -371,7 +371,7 @@ sub write_single_coil {
   my $bit_value = shift;
   # build frame
   $bit_value = ($bit_value) ? 0xFF : 0;
-  my $tx_buffer = $self->_mbus_frame(WRITE_SINGLE_COIL, pack("nC", $bit_addr, $bit_value));
+  my $tx_buffer = $self->_mbus_frame(WRITE_SINGLE_COIL, pack("nCC", $bit_addr, $bit_value, 0));
   # send request
   my $s_send = $self->_send_mbus($tx_buffer);
   # check error
@@ -381,7 +381,7 @@ sub write_single_coil {
   # check error
   return undef unless ($f_body);
   # register extract
-  my ($rx_bit_addr, $rx_bit_value) = unpack 'nC', $f_body;
+  my ($rx_bit_addr, $rx_bit_value, $rx_padding) = unpack 'nCC', $f_body;
   # check bit write
   return (($rx_bit_addr == $bit_addr) and ($rx_bit_value == $bit_value)) ? 1 : undef;
 }
@@ -870,7 +870,7 @@ Return a ref to a bits array or undef if error.
 Example read 10 bits at address 55:
 
   my $bits = $m->read_coils(55, 10);
-  foreach my $bit ($@bits) {
+  foreach my $bit (@$bits) {
     print $bit."\n";
   }
 
@@ -902,7 +902,7 @@ Return a ref to a registers array or undef if error.
 Example read 2 registers at hex address 66:
 
   my $regs = $m->read_holding_registers(2, 0x66);
-  foreach my $reg ($@regs) {
+  foreach my $reg (@$regs) {
     print $reg."\n";
   }
 
@@ -917,7 +917,7 @@ Return a ref to a registers array or undef if error.
 Example read 4 registers at hex address 100:
 
   my $regs = $m->read_input_registers(4, 0x100);
-  foreach my $reg ($@regs) {
+  foreach my $reg (@$regs) {
     print $reg."\n";
   }
 
