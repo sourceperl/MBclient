@@ -1,5 +1,10 @@
 Revision history for perl module MBclient
 
+1.56 2014-08-05
+
+     - Fix bug in pod documentation (samples with "$@" instead of "@$").
+     - Fix bug in write_single_coil(), pack/unpack skip the last padding byte.
+
 1.55 2014-07-15
 
      - Add POD coverage test to dist test.
