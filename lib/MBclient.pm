@@ -884,7 +884,7 @@ Return a ref to a bits array or undef if error.
 
 Example read 1 bit at hex address 45:
 
-  my $bits = $m->read_discrete_inputs(1, 0x45);
+  my $bits = $m->read_discrete_inputs(0x45, 1);
   if ($bits) {
     print $$bits[0]."\n";
   } else {
@@ -901,7 +901,7 @@ Return a ref to a registers array or undef if error.
 
 Example read 2 registers at hex address 66:
 
-  my $regs = $m->read_holding_registers(2, 0x66);
+  my $regs = $m->read_holding_registers(0x66, 2);
   foreach my $reg (@$regs) {
     print $reg."\n";
   }
@@ -916,7 +916,7 @@ Return a ref to a registers array or undef if error.
 
 Example read 4 registers at hex address 100:
 
-  my $regs = $m->read_input_registers(4, 0x100);
+  my $regs = $m->read_input_registers(0x100, 4);
   foreach my $reg (@$regs) {
     print $reg."\n";
   }

@@ -1,5 +1,9 @@
 Revision history for perl module MBclient
 
+next release
+
+     - Fix pod documentation: examples with parameters swaped (issue #8)
+
 1.56 2014-08-05
 
      - Fix bug in pod documentation (samples with "$@" instead of "@$").
