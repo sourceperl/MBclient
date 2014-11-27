@@ -1,6 +1,6 @@
 Revision history for perl module MBclient
 
-next release
+1.57 2014-11-27
 
      - Fix pod documentation: examples with parameters swaped (issue #8).
      - Reset constant FRAME_RTU_MAXSIZE.
