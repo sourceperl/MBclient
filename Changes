@@ -2,7 +2,10 @@ Revision history for perl module MBclient
 
 next release
 
-     - Fix pod documentation: examples with parameters swaped (issue #8)
+     - Fix pod documentation: examples with parameters swaped (issue #8).
+     - Reset constant FRAME_RTU_MAXSIZE.
+     - Improve _recv_mbus() for RTU mode.
+     - Optimize _crc_is_ok().
 
 1.56 2014-08-05
 

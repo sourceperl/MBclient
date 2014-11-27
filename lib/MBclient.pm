@@ -41,7 +41,7 @@ our $VERSION = '1.56';
 ## ModBus/TCP
 use constant MODBUS_PORT                                 => 502;
 ## ModBus RTU
-use constant FRAME_RTU_MAXSIZE                           => 512;
+use constant FRAME_RTU_MAXSIZE                           => 256;
 ## Modbus mode
 use constant MODBUS_TCP                                  => 1;
 use constant MODBUS_RTU                                  => 2;
@@ -74,7 +74,7 @@ use constant MB_RECV_ERR                                 => 4;
 use constant MB_TIMEOUT_ERR                              => 5;
 use constant MB_FRAME_ERR                                => 6;
 use constant MB_EXCEPT_ERR                               => 7;
-
+use constant MB_CRC_ERR                                  => 8;
 
 ##
 ## Constructor.
@@ -529,6 +529,22 @@ sub _recv_mbus {
     $rx_frame = $rx_buffer;
     # dump frame
     $self->_pretty_dump('Rx', $rx_frame) if ($self->{debug});
+    # RTU frame min size is 5: check this here
+    if (bytes::length($rx_frame) < 5) {
+      $self->{LAST_ERROR} = MB_RECV_ERR;
+      print 'short frame error'."\n" if ($self->{debug});
+      $self->close;
+      return undef;
+    }
+    # check CRC
+    if (! $self->_crc_is_ok($rx_frame)) {
+      $self->{LAST_ERROR} = MB_CRC_ERR;
+      print 'CRC error'."\n" if ($self->{debug});
+      $self->close;
+      return undef;
+    }
+    # remove CRC
+    $rx_frame = bytes::substr($rx_frame, 0, -2);
     # body decode
     ($rx_unit_id, $rx_bd_fc, $f_body) = unpack "CCa*", $rx_frame;
     # check
@@ -653,8 +669,7 @@ sub _add_crc {
 sub _crc_is_ok {
   my $self  = shift;
   my $frame = shift;
-  my $crc = unpack('v', bytes::substr($frame, -2));
-  return ($crc == $self->_crc($frame));
+  return ($self->_crc($frame) == 0);
 }
 
 # Print modbus/TCP frame ("[header]body") or modbus RTU ("body[CRC]").
