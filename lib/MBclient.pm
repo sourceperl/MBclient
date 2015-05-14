@@ -54,6 +54,7 @@ use constant READ_INPUT_REGISTERS                        => 0x04;
 use constant WRITE_SINGLE_COIL                           => 0x05;
 use constant WRITE_SINGLE_REGISTER                       => 0x06;
 use constant WRITE_MULTIPLE_REGISTERS                    => 0x10;
+use constant READ_GENERAL_REFERENCE                      => 0x14;
 use constant MODBUS_ENCAPSULATED_INTERFACE               => 0x2B;
 ## Modbus except code
 use constant EXP_ILLEGAL_FUNCTION                        => 0x01;
@@ -445,6 +446,34 @@ sub write_multiple_registers {
   my ($rx_reg_addr, $rx_reg_nb) = unpack 'nn', $f_body;
   # check regs write
   return ($rx_reg_addr == $reg_addr) ? 1 : undef;
+}
+
+##
+## Modbus function READ_GENERAL_REFERENCE (0x14).
+##   read_single_general_reference(file_number, bit_addr, bit_number)
+##   return a ref to result array
+##          or undef if error
+
+sub read_single_general_reference {
+  my $self     = shift;
+  my $file_num = shift;
+  my $reg_addr = shift;
+  my $reg_nb   = shift;
+  # build frame
+  my $tx_buffer = $self->_mbus_frame(READ_GENERAL_REFERENCE, pack("CCnnn", 7, 6, $file_num, $reg_addr, $reg_nb));
+  # send request
+  my $s_send = $self->_send_mbus($tx_buffer);
+  # check error
+  return undef unless ($s_send);
+  # receive
+  my $f_body = $self->_recv_mbus();
+  # check error
+  return undef unless ($f_body);
+  # register extract
+  my ($rx_reg_count, $rx_req_count, $rx_req_ref, $f_regs) = unpack 'CCCa*', $f_body;
+  # read bits registers
+  my @registers = unpack 'n*', $f_regs;
+  return \@registers;
 }
 
 # Build modbus frame.
