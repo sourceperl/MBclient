@@ -1,0 +1,22 @@
+* Update documentation (perl POD):
+----------------------------------
+
+# POD documentation MUST be edit in the module code (lib/MBclient.pm).
+# README.pod is build from the module code with :
+podselect lib/MBclient.pm > README.pod
+
+
+* Update CPAN archive (with Module::Build):
+-------------------------------------------
+
+# create Makefile and META files
+perl Makefile.PL
+
+# update MANIFEST (howtos/* skip in MANIFEST.SKIP)
+make manifest
+
+# create archive (like MBclient-1.58.tar.gz)
+make
+make dist
+
+# then upload archive to CPAN: connect to http://pause.perl.org

@@ -1,7 +1,7 @@
 Revision history for perl module MBclient
 
 1.58 2017-10-25
-     - Make timeout user definable.
+     - Make timeout user definable (thanks to markohrastovec).
 
 1.57 2014-11-27
 
