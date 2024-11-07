@@ -218,14 +218,14 @@ sub timeout {
 
 sub open {
   my $self = shift;
-  print 'call open()'."\n" if ($self->{debug});
+  print STDERR 'call open()'."\n" if ($self->{debug});
   # restart TCP if already open
   $self->close if ($self->is_open);
   # name resolve
   my $ad_ip = inet_aton($self->{HOST});
   unless($ad_ip) {
     $self->{LAST_ERROR} = MB_RESOLVE_ERR;
-    print 'IP resolve error'."\n" if ($self->{debug});
+    print STDERR 'IP resolve error'."\n" if ($self->{debug});
     return undef;
   }
   # set socket
@@ -236,7 +236,7 @@ sub open {
   } else {
     $self->{sock} = undef;
     $self->{LAST_ERROR} = MB_CONNECT_ERR;
-    print 'TCP connect error'."\n" if ($self->{debug});
+    print STDERR 'TCP connect error'."\n" if ($self->{debug});
     return undef;
   }
 };
@@ -549,14 +549,14 @@ sub _recv_mbus {
     # RTU frame min size is 5: check this here
     if (bytes::length($rx_frame) < 5) {
       $self->{LAST_ERROR} = MB_RECV_ERR;
-      print 'short frame error'."\n" if ($self->{debug});
+      print STDERR 'short frame error'."\n" if ($self->{debug});
       $self->close;
       return undef;
     }
     # check CRC
     if (! $self->_crc_is_ok($rx_frame)) {
       $self->{LAST_ERROR} = MB_CRC_ERR;
-      print 'CRC error'."\n" if ($self->{debug});
+      print STDERR 'CRC error'."\n" if ($self->{debug});
       $self->close;
       return undef;
     }
@@ -576,7 +576,7 @@ sub _recv_mbus {
     my ($exp_code) = unpack "C", $f_body;
     $self->{LAST_ERROR}  = MB_EXCEPT_ERR;
     $self->{LAST_EXCEPT} = $exp_code;
-    print 'except (code '.$exp_code.')'."\n" if ($self->{debug});
+    print STDERR 'except (code '.$exp_code.')'."\n" if ($self->{debug});
     return undef;
   } else {
     # return
@@ -593,7 +593,7 @@ sub _send {
   my $data = shift;
   # check link, open if need
   unless ($self->is_open) {
-    print 'call _send() not open -> call open()'."\n" if ($self->{debug});
+    print STDERR 'call _send() not open -> call open()'."\n" if ($self->{debug});
     return undef unless ($self->open);
   }
   # send data
@@ -602,7 +602,7 @@ sub _send {
   # send error
   if ($send_l != $data_l) {
     $self->{LAST_ERROR} = MB_SEND_ERR;
-    print '_send error'."\n" if ($self->{debug});
+    print STDERR '_send error'."\n" if ($self->{debug});
     $self->close;
     return undef;
   } else {
@@ -627,7 +627,7 @@ sub _recv {
   my $s_recv = recv($self->{sock}, $buffer, $max_size, 0);
   unless (defined $s_recv) {
     $self->{LAST_ERROR} = MB_RECV_ERR;
-    print '_recv error'."\n" if ($self->{debug});
+    print STDERR '_recv error'."\n" if ($self->{debug});
     $self->close;
     return undef;
   }
@@ -644,7 +644,7 @@ sub _can_read {
     return $_select;
   } else {
     $self->{LAST_ERROR} = MB_TIMEOUT_ERR;
-    print 'timeout error'."\n" if ($self->{debug});
+    print STDERR 'timeout error'."\n" if ($self->{debug});
     $self->close;
     return undef;
   }
@@ -704,9 +704,9 @@ sub _pretty_dump {
     $dump[$#dump] = $dump[$#dump]."]";
   }
   # print result
-  print $label."\n";
-  for (@dump) {print $_." ";}
-  print "\n\n";
+  print STDERR $label."\n";
+  for (@dump) {print STDERR $_." ";}
+  print STDERR "\n\n";
 }
 
 1;
