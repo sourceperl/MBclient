@@ -1,3 +1,7 @@
+=head1 Important note
+
+B<Due to time constraints, this project is currently unmaintained. Perhaps someone will have the time and inclination to breathe new life into it (including adding IPv6 support). Feel free to fork it.>
+
 =head1 NAME
 
 MBclient - Add modbus TCP or RTU functions for your program.
